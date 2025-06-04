@@ -12,6 +12,7 @@ build/
 
 # Local embeddings and cache (never commit these)
 embeddings/
+test-embeddings/
 local_cache/
 .indexer-metadata.json
 

@@ -1,0 +1,63 @@
+{
+  "name": "codebase-mcp-indexer",
+  "version": "2.0.0",
+  "description": "AI-powered codebase indexer with semantic search via Model Context Protocol (MCP)",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node --esm src/server.ts",
+    "index": "ts-node --esm src/cli.ts index",
+    "search": "ts-node --esm src/cli.ts search",
+    "clean": "rm -rf dist embeddings",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "chokidar": "^4.0.1",
+    "commander": "^12.1.0",
+    "esprima": "^4.0.1",
+    "fastembed": "^1.14.4",
+    "ignore": "^6.0.2",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/esprima": "^4.0.6",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.2",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "ai",
+    "codebase",
+    "indexer",
+    "semantic-search",
+    "mcp",
+    "model-context-protocol",
+    "embeddings",
+    "code-analysis",
+    "developer-tools",
+    "typescript",
+    "javascript",
+    "llm",
+    "rag",
+    "code-intelligence"
+  ],
+  "author": "Codebase MCP Indexer Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marshaltudu14/codebase-mcp-indexer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/marshaltudu14/codebase-mcp-indexer/issues"
+  },
+  "homepage": "https://github.com/marshaltudu14/codebase-mcp-indexer#readme"
+}

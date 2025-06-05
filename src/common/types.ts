@@ -166,6 +166,15 @@ export interface CodeChunk {
   types?: string[];
   concepts?: string[]; // Added concepts
   dependencies?: string[]; // Added dependencies
+  metadata?: {
+    fileType?: string;
+    exports?: string[];
+    functions?: string[];
+    components?: string[];
+    keywords?: string[];
+    complexity?: number;
+    importance?: number;
+  };
 }
 
 export interface SearchResult {
@@ -245,25 +254,105 @@ export const DEFAULT_INDEXING_OPTIONS: IndexingOptions = {
     '.dockerfile', '.docker', '.makefile'
   ],
   ignorePatterns: [
+    // Dependencies and package managers
     'node_modules/**',
+    'bower_components/**',
+    'vendor/**',
+    'packages/**',
+
+    // Version control
+    '.git/**',
+    '.svn/**',
+    '.hg/**',
+
+    // Build outputs and generated files
     'dist/**',
     'build/**',
+    'out/**',
     '.next/**',
     '.nuxt/**',
+    '.vite/**',
+    '.turbo/**',
+    'target/**',
+    'bin/**',
+    'obj/**',
+
+    // Cache and temporary files
+    '.cache/**',
+    '.temp/**',
+    '.tmp/**',
+    '.nyc_output/**',
     'coverage/**',
-    '.git/**',
+    '.coverage/**',
+    'htmlcov/**',
+
+    // IDE and editor files
     '.vscode/**',
     '.idea/**',
-    '*.min.js',
-    '*.min.css',
-    '*.map',
+    '.vs/**',
+    '*.swp',
+    '*.swo',
+    '*~',
+
+    // OS files
+    '.DS_Store',
+    'Thumbs.db',
+    'desktop.ini',
+
+    // Logs and debugging
     '*.log',
-    '.env*',
+    'logs/**',
+    'npm-debug.log*',
+    'yarn-debug.log*',
+    'yarn-error.log*',
+
+    // Lock files and generated configs
     'package-lock.json',
     'yarn.lock',
     'pnpm-lock.yaml',
-    'custom-indexer/embeddings/**',
-    '.indexer-metadata.json'
+    'Cargo.lock',
+    'Pipfile.lock',
+    'poetry.lock',
+
+    // Minified and compiled files
+    '*.min.js',
+    '*.min.css',
+    '*.map',
+    '*.d.ts', // TypeScript declaration files (usually generated)
+
+    // Environment and secrets
+    '.env*',
+    '*.key',
+    '*.pem',
+    '*.p12',
+
+    // Custom indexer files (don't index ourselves)
+    'custom-indexer/**',
+    'ultra-fast-index/**',
+    '.indexer-metadata.json',
+
+    // Large media files that don't contain searchable code
+    '*.jpg',
+    '*.jpeg',
+    '*.png',
+    '*.gif',
+    '*.webp',
+    '*.svg',
+    '*.ico',
+    '*.mp4',
+    '*.mp3',
+    '*.wav',
+    '*.pdf',
+    '*.zip',
+    '*.tar.gz',
+    '*.rar',
+
+    // Documentation that's usually not code (but keep some)
+    'docs/**',
+    'documentation/**',
+    'CHANGELOG.md',
+    'LICENSE*',
+    'CONTRIBUTING.md',
   ],
   includeSymbols: true,
   includeDependencies: true

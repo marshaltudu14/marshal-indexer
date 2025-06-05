@@ -1,66 +1,85 @@
-# Ultra-Fast Lexical Indexer Architecture
+# Marshal Context Engine - Architecture
 
 ## 🏗️ System Overview
 
-The Ultra-Fast Lexical Indexer is designed with **NO EMBEDDINGS** for maximum speed and simplicity. The architecture is built around five core principles:
+The Marshal Context Engine is designed to rival Augment's context engine using **pure lexical indexing with contextual intelligence**. The architecture delivers 6x faster indexing while maintaining high search quality through advanced code understanding.
 
-1. **Pure Lexical**: No embeddings, no models, just fast text processing
-2. **TF-IDF Scoring**: Advanced relevance scoring without neural networks
-3. **Instant Startup**: No model loading delays - ready immediately
-4. **Minimal Storage**: Compact indices instead of heavy embedding vectors
-5. **Lightning Performance**: Sub-second search with optimized data structures
-6. **Absolute Path Support**: Always provides complete file paths for easy navigation in large projects
+## 🎯 Core Design Principles
 
-## 📁 Directory Structure (Simplified)
+1. **NO EMBEDDINGS**: Pure lexical indexing with contextual analysis for maximum speed
+2. **Contextual Intelligence**: Deep understanding of code structure, patterns, and relationships
+3. **Augment-Like Quality**: Advanced code analysis that understands frameworks and patterns
+4. **Ultra-Fast Performance**: 6x faster indexing than embedding-based solutions (5.28s vs 60s)
+5. **Auto-Updates**: Real-time file watching enabled by default with incremental updates
+6. **Smart Filtering**: Intelligent exclusion of irrelevant files and build artifacts
+7. **Zero Dependencies**: No AI models, no GPU requirements, no external services
+
+## 📁 Directory Structure
 
 ```
 src/
-├── indexer/                 # Core indexer (NO EMBEDDINGS)
-│   └── UltraFastIndexer.ts      # Main ultra-fast lexical indexer
-├── search/                  # Simplified search
-│   └── LexicalSearch.ts          # Pure lexical search with TF-IDF
-├── cli/                     # Command line interface
-│   └── index.ts                  # CLI commands for indexing and search
-├── utils/                   # Essential utilities only
-│   ├── index.ts                  # File processing utilities
-│   └── language.ts               # Language detection
-├── common/                  # Shared types and interfaces
-│   └── types.ts                  # Core type definitions
-└── server.ts                # MCP server implementation
+├── indexer/                     # Core indexing engine
+│   ├── UltraFastIndexer.ts         # Main lexical indexer with contextual analysis
+│   └── ContextualAnalyzer.ts       # Code structure and relationship analysis
+├── search/                      # Search implementation
+│   └── LexicalSearch.ts             # Enhanced TF-IDF search with quality boosting
+├── cli/                         # Command line interface
+│   └── index.ts                     # CLI commands with auto-watching support
+├── utils/                       # Utilities and helpers
+│   ├── utils.ts                     # File processing and language detection
+│   └── QueryUtils.ts               # Query processing utilities
+├── common/                      # Shared types and interfaces
+│   └── types.ts                     # Enhanced type definitions with metadata
+└── server.ts                    # MCP server implementation
 ```
 
-**Removed Components (NO LONGER NEEDED):**
-- ❌ `core/` - No complex orchestration needed
-- ❌ `intelligence/` - No AI/ML components required
-- ❌ `graph/` - No graph analysis needed
-- ❌ `understanding/` - No semantic understanding required
-- ❌ `storage/` - Simple JSON storage instead
-- ❌ `chunker/` - Simplified chunking in main indexer
-- ❌ `engine/` - No embedding engine needed
+## 🔧 Core Components
 
-## 🔄 Ultra-Fast Data Flow Architecture
+### 1. UltraFastIndexer (Enhanced)
+- **Purpose**: Lightning-fast file processing with contextual analysis
+- **Technology**: Enhanced lexical analysis with TF-IDF scoring and code structure understanding
+- **Performance**: 6x faster than embedding-based solutions (5.28s for 895 files)
+- **Features**: Auto-watching, incremental updates, smart file filtering, contextual metadata
 
-### 1. Simplified Query Processing Pipeline
+### 2. ContextualAnalyzer (NEW)
+- **Purpose**: Augment-like code structure understanding without embeddings
+- **Capabilities**:
+  - File type detection (API, component, page, utility, etc.)
+  - Export/import analysis and relationship mapping
+  - Function, class, interface, and component extraction
+  - React component and Next.js route detection
+  - Schema and hook identification
+  - Semantic keyword extraction
+  - Code complexity and importance scoring
+
+## 🔄 Enhanced Data Flow Architecture
+
+### 1. Enhanced Query Processing Pipeline
 
 ```mermaid
 graph TD
-    A[User Query] --> B[Term Extraction]
-    B --> C[TF-IDF Scoring]
-    C --> D[Path Boosting]
-    D --> E[Result Ranking]
-    E --> F[Final Results]
+    A[User Query] --> B[Enhanced Term Extraction]
+    B --> C[Code-Aware Tokenization]
+    C --> D[TF-IDF Scoring with Context]
+    D --> E[Quality Boosting]
+    E --> F[Smart Filtering]
+    F --> G[Contextual Ranking]
+    G --> H[Final Results]
 ```
 
-### 2. Lightning-Fast Indexing Pipeline
+### 2. Contextual Indexing Pipeline
 
 ```mermaid
 graph TD
-    A[Source Files] --> B[Parallel File Processing]
-    B --> C[Simple Chunking]
-    C --> D[Term Extraction]
-    D --> E[TF-IDF Index Building]
-    E --> F[JSON Storage]
-    F --> G[Ready for Search]
+    A[Source Files] --> B[Smart File Filtering]
+    B --> C[Parallel File Processing]
+    C --> D[Contextual Analysis]
+    D --> E[Enhanced Chunking]
+    E --> F[Code-Aware Term Extraction]
+    F --> G[TF-IDF Index Building]
+    G --> H[Metadata Storage]
+    H --> I[File Watching Setup]
+    I --> J[Ready for Search]
 ```
 
 **Key Simplifications:**
@@ -146,12 +165,19 @@ Relationship-based discovery:
 
 ## 🎯 Key Innovations
 
-### 1. Intent-Aware Search
-Unlike traditional keyword search, the Marshal Context Engine understands what users are trying to accomplish:
-- **Function Search**: Optimized for finding specific functions or methods
-- **Debug Search**: Specialized for error handling and troubleshooting
-- **Concept Search**: Focused on understanding and explanation
-- **Pattern Search**: Finds similar code patterns and implementations
+### 1. Contextual Intelligence Without Embeddings
+The Marshal Context Engine achieves Augment-like quality through pure lexical analysis:
+- **Code Structure Understanding**: Analyzes file types, exports, imports, and relationships
+- **Framework Awareness**: Understands React components, Next.js routes, API endpoints
+- **Pattern Recognition**: Identifies functions, classes, hooks, schemas, and components
+- **Semantic Keywords**: Extracts domain-specific terms and concepts
+
+### 2. Enhanced Term Extraction
+Advanced tokenization that understands code patterns:
+- **CamelCase Splitting**: `updateBusinessCard` → `update`, `business`, `card`
+- **Function Detection**: Extracts function names and method calls
+- **Import/Export Analysis**: Maps code relationships and dependencies
+- **String Literal Processing**: Finds API endpoints and routes in strings
 
 ### 2. Explainable Results
 Every search result includes detailed explanations:

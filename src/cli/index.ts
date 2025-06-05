@@ -8,7 +8,7 @@ export function createIndexCommand(): Command {
     .description('Index a codebase using ultra-fast lexical indexing (no embeddings)')
     .argument('[path]', 'Path to the codebase', '.')
     .option('-o, --output <dir>', 'Output directory for index', './ultra-fast-index')
-    .option('--watch', 'Enable file watching for auto-updates', false)
+    .option('--watch', 'Enable file watching for auto-updates (default: true)', true)
     .option('--no-watch', 'Disable file watching')
     .action(async (path: string, options: { output: string; watch: boolean }) => {
       console.log(`🚀 Ultra-fast indexing codebase at: ${path}`);
@@ -26,11 +26,11 @@ export function createIndexCommand(): Command {
         }
       });
 
-      // Enable file watching by default unless explicitly disabled
-      if (options.watch !== false) {
-        console.log('👀 Starting file watcher for auto-updates...');
-        // TODO: Implement file watching for UltraFastIndexer
-        console.log('✅ File watching enabled - index will auto-update on file changes');
+      // Enable file watching by default unless explicitly disabled with --no-watch
+      if (options.watch) {
+        await indexer.startWatching();
+      } else {
+        console.log('⚠️ File watching disabled - index will not auto-update on file changes');
       }
 
       console.log('✅ Ultra-fast indexing completed successfully');

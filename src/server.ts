@@ -239,12 +239,13 @@ class CodebaseIndexerMCPServer {
     }
 
     const stats = this.indexer.getStats();
-    
+    const languages = (stats as any).languages || {};
+
     return {
       content: [
         {
           type: 'text',
-          text: `${progressText}\n\nIndex Statistics:\n- Total files: ${stats.totalFiles}\n- Total chunks: ${stats.totalChunks}\n- Languages: ${Object.entries(stats.languages).map(([lang, count]) => `${lang} (${count})`).join(', ')}`
+          text: `${progressText}\n\nIndex Statistics:\n- Total files: ${stats.totalFiles}\n- Total chunks: ${stats.totalChunks}\n- Languages: ${Object.entries(languages).map(([lang, count]) => `${lang} (${count})`).join(', ')}`
         }
       ]
     };
@@ -337,6 +338,7 @@ class CodebaseIndexerMCPServer {
     if (!this.indexer) throw new Error('Indexer not initialized');
 
     const stats = this.indexer.getStats();
+    const languages = (stats as any).languages || {};
 
     const statsText = `# Ultra-Fast Index Statistics (NO EMBEDDINGS)
 
@@ -348,7 +350,7 @@ class CodebaseIndexerMCPServer {
 **Index Directory:** ${this.indexDir}
 
 ## Languages:
-${Object.entries(stats.languages).map(([lang, count]) => `- ${lang}: ${count} chunks`).join('\n')}
+${Object.entries(languages).map(([lang, count]) => `- ${lang}: ${count} chunks`).join('\n')}
 
 ## Performance Benefits:
 - ⚡ **NO MODEL DOWNLOADS** - No embedding models required

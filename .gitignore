@@ -15,6 +15,7 @@ embeddings/
 test-embeddings/
 local_cache/
 ultra-fast-index/
+index/
 .indexer-metadata.json
 .marshal-metadata.json
 

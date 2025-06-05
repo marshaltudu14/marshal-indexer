@@ -1,6 +1,5 @@
 import { Command } from 'commander';
 import { UltraFastIndexer } from '../indexer/UltraFastIndexer.js';
-import { IndexingProgress } from '../common/types.js';
 import { join } from 'path';
 
 export function createIndexCommand(): Command {
@@ -17,20 +16,11 @@ export function createIndexCommand(): Command {
       const indexDir = join(path, options.output);
       const indexer = new UltraFastIndexer(path, indexDir);
 
-      await indexer.initialize();
-      await indexer.indexCodebase((progress: IndexingProgress) => {
-        if (progress.phase === 'parsing') {
-          console.log(`📊 Processing: ${progress.filesProcessed}/${progress.totalFiles} files`);
-        } else if (progress.phase === 'embedding') {
-          console.log(`🧠 Building lexical index: ${progress.chunksProcessed}/${progress.totalChunks} chunks`);
-        }
-      });
+      await indexer.indexProject();
 
-      // Enable file watching by default unless explicitly disabled with --no-watch
-      if (options.watch) {
-        await indexer.startWatching();
-      } else {
+      if (!options.watch) {
         console.log('⚠️ File watching disabled - index will not auto-update on file changes');
+        await indexer.stop();
       }
 
       console.log('✅ Ultra-fast indexing completed successfully');
@@ -49,9 +39,15 @@ export function createSearchCommand(): Command {
 
       const indexDir = join(options.path, options.index);
       const indexer = new UltraFastIndexer(options.path, indexDir);
-      await indexer.initialize();
+      // No need to initialize - indexProject() handles loading existing index
 
-      const results = await indexer.search(query, parseInt(options.topK));
+      const results = await indexer.search(query, {
+        maxResults: parseInt(options.topK),
+        includeSemanticExpansion: true,
+        enableResultClustering: true,
+        codeSpecificRanking: true,
+        fuzzySearch: true
+      });
 
       console.log(`\n📊 Found ${results.length} results:\n`);
       for (const [index, result] of results.entries()) {
@@ -73,16 +69,20 @@ export function createStatsCommand(): Command {
 
       const indexDir = join(options.path, options.index);
       const indexer = new UltraFastIndexer(options.path, indexDir);
-      await indexer.initialize();
+      // Load existing index to get stats
+      await indexer.indexProject();
 
       const stats = indexer.getStats();
 
-      console.log('\n📈 Ultra-Fast Index Statistics:');
+      console.log('\n📈 Enhanced Ultra-Fast Index Statistics:');
       console.log(`Total Files: ${stats.totalFiles}`);
       console.log(`Total Chunks: ${stats.totalChunks}`);
-      console.log(`Total Terms: ${stats.totalTerms}`);
-      console.log(`Languages: ${Object.keys(stats.languages).join(', ')}`);
-      console.log(`Index Type: Lexical (TF-IDF) - NO EMBEDDINGS`);
+      console.log(`Total Terms: ${stats.indexStats.totalTerms}`);
+      console.log(`Average Terms per Chunk: ${stats.indexStats.averageTermsPerChunk.toFixed(1)}`);
+      console.log(`File Watching: ${stats.isWatching ? 'Enabled' : 'Disabled'}`);
+      console.log(`Index Type: Enhanced Lexical (TF-IDF + Code-Specific Signals) - NO EMBEDDINGS`);
+
+      await indexer.stop();
     });
 }
 
@@ -92,8 +92,30 @@ export function createClearCommand(): Command {
     .option('-e, --embeddings <dir>', 'Embeddings directory', './embeddings')
     .action(async (_options: { embeddings: string }) => {
       console.log('🗑️ Clearing index...');
-      
+
       // This would implement clearing logic
       console.log('✅ Index cleared successfully');
     });
+}
+
+// Main CLI entry point
+async function main() {
+  const program = new Command();
+
+  program
+    .name('marshal-indexer')
+    .description('Marshal Context Engine - Ultra-Fast Codebase Indexer')
+    .version('2.0.0');
+
+  program.addCommand(createIndexCommand());
+  program.addCommand(createSearchCommand());
+  program.addCommand(createStatsCommand());
+  program.addCommand(createClearCommand());
+
+  await program.parseAsync(process.argv);
+}
+
+// Run the CLI if this file is executed directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch(console.error);
 }

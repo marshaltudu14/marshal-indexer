@@ -293,3 +293,59 @@ export async function fileExists(filePath: string): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Check if a file is a code file based on extension
+ */
+export function isCodeFile(filePath: string): boolean {
+  const codeExtensions = [
+    '.js', '.jsx', '.ts', '.tsx', '.vue', '.svelte',
+    '.py', '.java', '.c', '.cpp', '.h', '.hpp', '.cs',
+    '.php', '.rb', '.go', '.rs', '.swift', '.kt', '.scala',
+    '.clj', '.hs', '.ml', '.fs', '.css', '.scss', '.sass',
+    '.less', '.styl', '.html', '.htm', '.xml', '.svg',
+    '.json', '.yaml', '.yml', '.toml', '.ini', '.md', '.mdx',
+    '.sql', '.graphql', '.gql', '.proto', '.sh', '.bash',
+    '.zsh', '.fish', '.ps1', '.dockerfile', '.docker'
+  ];
+
+  const ext = extname(filePath).toLowerCase();
+  return codeExtensions.includes(ext);
+}
+
+/**
+ * Get all code files in a directory
+ */
+export async function getAllCodeFiles(
+  dirPath: string,
+  excludePatterns: string[] = []
+): Promise<string[]> {
+  const codeExtensions = [
+    '.js', '.jsx', '.ts', '.tsx', '.vue', '.svelte',
+    '.py', '.java', '.c', '.cpp', '.h', '.hpp', '.cs',
+    '.php', '.rb', '.go', '.rs', '.swift', '.kt', '.scala',
+    '.clj', '.hs', '.ml', '.fs', '.css', '.scss', '.sass',
+    '.less', '.styl', '.html', '.htm', '.xml', '.svg',
+    '.json', '.yaml', '.yml', '.toml', '.ini', '.md', '.mdx',
+    '.sql', '.graphql', '.gql', '.proto', '.sh', '.bash',
+    '.zsh', '.fish', '.ps1', '.dockerfile', '.docker'
+  ];
+
+  const defaultExcludePatterns = [
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/build/**',
+    '**/.git/**',
+    '**/coverage/**',
+    '**/.nyc_output/**',
+    '**/tmp/**',
+    '**/temp/**',
+    '**/*.log',
+    '**/.DS_Store',
+    '**/Thumbs.db'
+  ];
+
+  const allExcludePatterns = [...defaultExcludePatterns, ...excludePatterns];
+
+  return await getAllFiles(dirPath, codeExtensions, allExcludePatterns);
+}

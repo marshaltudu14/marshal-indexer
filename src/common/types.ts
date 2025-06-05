@@ -160,10 +160,10 @@ export interface CodeChunk {
   symbols?: string[];
   imports?: string[];
   exports?: string[];
-  functions?: string[];
-  classes?: string[];
-  interfaces?: string[];
-  types?: string[];
+  functions?: FunctionDefinition[];
+  classes?: ClassDefinition[];
+  interfaces?: InterfaceDefinition[];
+  types?: TypeDefinition[];
   concepts?: string[]; // Added concepts
   dependencies?: string[]; // Added dependencies
   metadata?: {
@@ -174,7 +174,90 @@ export interface CodeChunk {
     keywords?: string[];
     complexity?: number;
     importance?: number;
+    // Enhanced symbol indexing metadata
+    symbolDensity?: number;
+    codeQuality?: number;
+    usageFrequency?: number;
+    // Semantic enhancements
+    semanticKeywords?: string[];
+    codePatterns?: string[];
+    frameworkSpecific?: string[];
+    // Ranking improvements
+    fileImportance?: number;
+    codeComplexityScore?: number;
+    documentationRatio?: number;
   };
+}
+
+// Enhanced symbol definitions for better indexing
+export interface FunctionDefinition {
+  name: string;
+  signature: string;
+  parameters: Parameter[];
+  returnType?: string;
+  isAsync: boolean;
+  isExported: boolean;
+  startLine: number;
+  endLine: number;
+  complexity: number;
+  documentation?: string;
+}
+
+export interface ClassDefinition {
+  name: string;
+  extends?: string;
+  implements?: string[];
+  methods: FunctionDefinition[];
+  properties: PropertyDefinition[];
+  isExported: boolean;
+  startLine: number;
+  endLine: number;
+  complexity: number;
+  documentation?: string;
+}
+
+export interface InterfaceDefinition {
+  name: string;
+  extends?: string[];
+  properties: PropertyDefinition[];
+  methods: MethodSignature[];
+  isExported: boolean;
+  startLine: number;
+  endLine: number;
+  documentation?: string;
+}
+
+export interface TypeDefinition {
+  name: string;
+  definition: string;
+  isExported: boolean;
+  startLine: number;
+  endLine: number;
+  documentation?: string;
+}
+
+export interface Parameter {
+  name: string;
+  type?: string;
+  isOptional: boolean;
+  defaultValue?: string;
+}
+
+export interface PropertyDefinition {
+  name: string;
+  type?: string;
+  isOptional: boolean;
+  isStatic: boolean;
+  visibility: 'public' | 'private' | 'protected';
+  documentation?: string;
+}
+
+export interface MethodSignature {
+  name: string;
+  parameters: Parameter[];
+  returnType?: string;
+  isOptional: boolean;
+  documentation?: string;
 }
 
 export interface SearchResult {
@@ -210,12 +293,9 @@ export interface IndexMetadata {
 
 export interface IndexingOptions {
   chunkSize: number;
-  chunkOverlap: number;
   maxFileSize: number;
-  supportedExtensions: string[];
-  ignorePatterns: string[];
-  includeSymbols: boolean;
-  includeDependencies: boolean;
+  enableWatching?: boolean;
+  excludePatterns?: string[];
 }
 
 export interface IndexingProgress {
@@ -237,123 +317,14 @@ export interface FileInfo {
 }
 
 export const DEFAULT_INDEXING_OPTIONS: IndexingOptions = {
-  chunkSize: 1024,
-  chunkOverlap: 100,
-  maxFileSize: 2 * 1024 * 1024,
-  supportedExtensions: [
-    '.js', '.jsx', '.ts', '.tsx', '.vue', '.svelte',
-    '.py', '.java', '.c', '.cpp', '.h', '.hpp',
-    '.cs', '.php', '.rb', '.go', '.rs', '.swift',
-    '.kt', '.scala', '.clj', '.hs', '.ml', '.fs',
-    '.css', '.scss', '.sass', '.less', '.styl',
-    '.html', '.htm', '.xml', '.svg',
-    '.json', '.yaml', '.yml', '.toml', '.ini',
-    '.md', '.mdx', '.txt', '.rst', '.adoc',
-    '.sql', '.graphql', '.gql', '.proto',
-    '.sh', '.bash', '.zsh', '.fish', '.ps1',
-    '.dockerfile', '.docker', '.makefile'
-  ],
-  ignorePatterns: [
-    // Dependencies and package managers
-    'node_modules/**',
-    'bower_components/**',
-    'vendor/**',
-    'packages/**',
-
-    // Version control
-    '.git/**',
-    '.svn/**',
-    '.hg/**',
-
-    // Build outputs and generated files
-    'dist/**',
-    'build/**',
-    'out/**',
-    '.next/**',
-    '.nuxt/**',
-    '.vite/**',
-    '.turbo/**',
-    'target/**',
-    'bin/**',
-    'obj/**',
-
-    // Cache and temporary files
-    '.cache/**',
-    '.temp/**',
-    '.tmp/**',
-    '.nyc_output/**',
-    'coverage/**',
-    '.coverage/**',
-    'htmlcov/**',
-
-    // IDE and editor files
-    '.vscode/**',
-    '.idea/**',
-    '.vs/**',
-    '*.swp',
-    '*.swo',
-    '*~',
-
-    // OS files
-    '.DS_Store',
-    'Thumbs.db',
-    'desktop.ini',
-
-    // Logs and debugging
-    '*.log',
-    'logs/**',
-    'npm-debug.log*',
-    'yarn-debug.log*',
-    'yarn-error.log*',
-
-    // Lock files and generated configs
-    'package-lock.json',
-    'yarn.lock',
-    'pnpm-lock.yaml',
-    'Cargo.lock',
-    'Pipfile.lock',
-    'poetry.lock',
-
-    // Minified and compiled files
-    '*.min.js',
-    '*.min.css',
-    '*.map',
-    '*.d.ts', // TypeScript declaration files (usually generated)
-
-    // Environment and secrets
-    '.env*',
-    '*.key',
-    '*.pem',
-    '*.p12',
-
-    // Custom indexer files (don't index ourselves)
-    'custom-indexer/**',
-    'ultra-fast-index/**',
-    '.indexer-metadata.json',
-
-    // Large media files that don't contain searchable code
-    '*.jpg',
-    '*.jpeg',
-    '*.png',
-    '*.gif',
-    '*.webp',
-    '*.svg',
-    '*.ico',
-    '*.mp4',
-    '*.mp3',
-    '*.wav',
-    '*.pdf',
-    '*.zip',
-    '*.tar.gz',
-    '*.rar',
-
-    // Documentation that's usually not code (but keep some)
-    'docs/**',
-    'documentation/**',
-    'CHANGELOG.md',
-    'LICENSE*',
-    'CONTRIBUTING.md',
-  ],
-  includeSymbols: true,
-  includeDependencies: true
+  chunkSize: 30,
+  maxFileSize: 1024 * 1024, // 1MB
+  enableWatching: true,
+  excludePatterns: [
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/build/**',
+    '**/.git/**',
+    '**/coverage/**'
+  ]
 };

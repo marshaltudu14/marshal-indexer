@@ -2,7 +2,15 @@ import { createHash } from 'crypto';
 import { promises as fs } from 'fs';
 import { extname, relative, resolve } from 'path';
 import ignore from 'ignore';
-import { FileInfo } from './types.js';
+
+// Define FileInfo interface locally since we removed the types file
+interface FileInfo {
+  path: string;
+  hash: string;
+  lastModified: number;
+  size: number;
+  language: string;
+}
 
 /**
  * Calculate MD5 hash of file content

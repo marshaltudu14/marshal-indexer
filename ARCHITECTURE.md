@@ -1,133 +1,105 @@
-# Marshal Context Engine Architecture
+# Ultra-Fast Lexical Indexer Architecture
 
 ## 🏗️ System Overview
 
-The Marshal Context Engine is designed with superior intent understanding, multi-modal search capabilities, and learning-based ranking. The architecture is built around five core principles:
+The Ultra-Fast Lexical Indexer is designed with **NO EMBEDDINGS** for maximum speed and simplicity. The architecture is built around five core principles:
 
-1. **Multi-Modal Intelligence**: Combines vector, lexical, and graph-based search
-2. **Adaptive Learning**: Continuously improves through user feedback and usage patterns
-3. **Explainable AI**: Provides clear reasoning for every search result
-4. **Massive Scale**: Handles enterprise codebases with millions of lines of code
-5. **Real-Time Performance**: Sub-second search with intelligent caching
+1. **Pure Lexical**: No embeddings, no models, just fast text processing
+2. **TF-IDF Scoring**: Advanced relevance scoring without neural networks
+3. **Instant Startup**: No model loading delays - ready immediately
+4. **Minimal Storage**: Compact indices instead of heavy embedding vectors
+5. **Lightning Performance**: Sub-second search with optimized data structures
 6. **Absolute Path Support**: Always provides complete file paths for easy navigation in large projects
 
-## 📁 Directory Structure
+## 📁 Directory Structure (Simplified)
 
 ```
 src/
-├── core/                    # Core engine components
-│   ├── MarshalContextEngine.ts    # Main engine orchestrator
-│   ├── QueryProcessor.ts          # Advanced query processing
-│   └── ResultFusion.ts           # Multi-modal result fusion
-├── intelligence/            # AI/ML components
-│   ├── IntentClassifier.ts       # Neural intent classification
-│   ├── QueryExpander.ts          # Contextual query expansion
-│   ├── LearningRanker.ts         # Adaptive ranking system
-│   └── PatternRecognizer.ts      # Code pattern recognition
-├── search/                  # Search implementations
-│   ├── HybridSearchEngine.ts     # Multi-modal search orchestrator
-│   ├── VectorSearch.ts           # Semantic vector search
-│   ├── LexicalSearch.ts          # Keyword and symbol search
-│   └── GraphSearch.ts            # Relationship-based search
-├── graph/                   # Graph analysis
-│   ├── CodeGraphBuilder.ts       # Build code relationship graphs
-│   ├── RelationshipAnalyzer.ts   # Analyze code dependencies
-│   └── DependencyTracker.ts      # Track code dependencies
-├── understanding/           # Code comprehension
-│   ├── ArchitectureAnalyzer.ts   # High-level architecture analysis
-│   ├── ConceptExtractor.ts       # Extract semantic concepts
-│   └── PatternMatcher.ts         # Identify code patterns
-├── storage/                 # Data management
-│   ├── EmbeddingStore.ts         # Efficient embedding storage
-│   ├── GraphStore.ts             # Graph data storage
-│   └── MetadataStore.ts          # Metadata management
-├── utils/                   # Utilities
-│   ├── PerformanceMonitor.ts     # Performance tracking
-│   ├── CacheManager.ts           # Multi-layer caching
-│   ├── QueryUtils.ts             # Query processing utilities
-│   └── ConfigManager.ts          # Configuration management
-├── chunker/                 # Existing chunking system
-├── indexer/                 # Existing indexer components
-└── common/                  # Shared types and interfaces
-    └── types.ts                  # Enhanced type definitions
+├── indexer/                 # Core indexer (NO EMBEDDINGS)
+│   └── UltraFastIndexer.ts      # Main ultra-fast lexical indexer
+├── search/                  # Simplified search
+│   └── LexicalSearch.ts          # Pure lexical search with TF-IDF
+├── cli/                     # Command line interface
+│   └── index.ts                  # CLI commands for indexing and search
+├── utils/                   # Essential utilities only
+│   ├── index.ts                  # File processing utilities
+│   └── language.ts               # Language detection
+├── common/                  # Shared types and interfaces
+│   └── types.ts                  # Core type definitions
+└── server.ts                # MCP server implementation
 ```
 
-## 🔄 Data Flow Architecture
+**Removed Components (NO LONGER NEEDED):**
+- ❌ `core/` - No complex orchestration needed
+- ❌ `intelligence/` - No AI/ML components required
+- ❌ `graph/` - No graph analysis needed
+- ❌ `understanding/` - No semantic understanding required
+- ❌ `storage/` - Simple JSON storage instead
+- ❌ `chunker/` - Simplified chunking in main indexer
+- ❌ `engine/` - No embedding engine needed
 
-### 1. Query Processing Pipeline
+## 🔄 Ultra-Fast Data Flow Architecture
+
+### 1. Simplified Query Processing Pipeline
 
 ```mermaid
 graph TD
-    A[User Query] --> B[QueryProcessor]
-    B --> C[Intent Classification]
-    B --> D[Query Expansion]
-    B --> E[Entity Extraction]
-    C --> F[HybridSearchEngine]
-    D --> F
-    E --> F
-    F --> G[Vector Search]
-    F --> H[Lexical Search]
-    F --> I[Graph Search]
-    G --> J[ResultFusion]
-    H --> J
-    I --> J
-    J --> K[LearningRanker]
-    K --> L[Final Results]
+    A[User Query] --> B[Term Extraction]
+    B --> C[TF-IDF Scoring]
+    C --> D[Path Boosting]
+    D --> E[Result Ranking]
+    E --> F[Final Results]
 ```
 
-### 2. Indexing Pipeline
+### 2. Lightning-Fast Indexing Pipeline
 
 ```mermaid
 graph TD
-    A[Source Files] --> B[MarshalChunker]
-    B --> C[Hierarchical Chunks]
-    C --> D[Symbol Extraction]
-    C --> E[Concept Extraction]
-    C --> F[Relationship Building]
-    D --> G[EmbeddingGeneration]
-    E --> G
-    F --> H[GraphStore]
-    G --> I[EmbeddingStore]
-    H --> J[MarshalContextEngine]
-    I --> J
+    A[Source Files] --> B[Parallel File Processing]
+    B --> C[Simple Chunking]
+    C --> D[Term Extraction]
+    D --> E[TF-IDF Index Building]
+    E --> F[JSON Storage]
+    F --> G[Ready for Search]
 ```
 
-## 🧠 Core Components
+**Key Simplifications:**
+- ❌ No Intent Classification - Direct term matching
+- ❌ No Query Expansion - Simple fuzzy matching
+- ❌ No Vector Search - Pure lexical approach
+- ❌ No Graph Search - No relationship analysis
+- ❌ No Result Fusion - Single scoring method
+- ❌ No Learning Ranker - Static TF-IDF scoring
 
-### MarshalContextEngine
-The main orchestrator that coordinates all components:
-- **Initialization**: Sets up embedding models and data structures
-- **Search Coordination**: Manages the multi-phase search process
-- **Performance Monitoring**: Tracks and optimizes system performance
-- **Learning Integration**: Incorporates user feedback for continuous improvement
+## 🧠 Core Components (Simplified)
 
-### QueryProcessor
-Advanced query understanding and preprocessing:
-- **Intent Classification**: Uses ML to understand query intent
-- **Query Expansion**: Generates semantic variations and related terms
-- **Entity Extraction**: Identifies code symbols, functions, and concepts
-- **Context Analysis**: Leverages previous queries and user patterns
+### UltraFastIndexer
+The main and only component needed:
+- **Instant Initialization**: No model loading - ready immediately
+- **Parallel File Processing**: Processes up to 64 files simultaneously
+- **Simple Chunking**: Fast text-based chunking without complex analysis
+- **TF-IDF Index Building**: Builds lexical index using term frequency analysis
 
-### HybridSearchEngine
-Multi-modal search orchestration:
-- **Adaptive Strategy**: Selects optimal search approach based on query
-- **Parallel Execution**: Runs multiple search strategies simultaneously
-- **Result Aggregation**: Combines results from different search modes
-- **Performance Optimization**: Caches and optimizes search operations
+### LexicalSearch
+Pure text-based search:
+- **Term Extraction**: Extracts search terms from user queries
+- **TF-IDF Scoring**: Calculates relevance using term frequency-inverse document frequency
+- **Fuzzy Matching**: Handles partial and approximate matches
+- **Path Boosting**: Boosts results when query matches file paths
 
-### ResultFusion
-Intelligent result combination and ranking:
-- **Multi-Factor Scoring**: Combines semantic, lexical, and graph scores
-- **Explainable Ranking**: Provides clear reasoning for result ordering
-- **Diversity Filtering**: Ensures result variety and relevance
-- **Confidence Scoring**: Estimates result quality and reliability
+### JSON Storage
+Simple and fast storage:
+- **Chunks Storage**: Stores code chunks in JSON format
+- **Index Storage**: Stores TF-IDF indices in JSON format
+- **No Database**: No complex database setup required
+- **Fast I/O**: Optimized for quick read/write operations
 
-### LearningRanker
-Adaptive ranking based on user behavior:
-- **Feedback Integration**: Learns from user clicks, likes, and interactions
-- **Pattern Recognition**: Identifies successful search patterns
-- **Personalization**: Adapts to individual user preferences
-- **Continuous Improvement**: Updates ranking models in real-time
+**Removed Complex Components:**
+- ❌ **QueryProcessor** - Direct term extraction instead
+- ❌ **HybridSearchEngine** - Single search strategy
+- ❌ **ResultFusion** - No fusion needed with single search type
+- ❌ **LearningRanker** - Static TF-IDF scoring
+- ❌ **EmbeddingEngine** - No embeddings used
 
 ## 🔍 Search Strategies
 

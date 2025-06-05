@@ -8,25 +8,24 @@ import {
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
 import { join } from 'path';
-import { MarshalCodebaseIndexer } from './indexer/MarshalCodebaseIndexer.js';
-// import { SearchOptions, DEFAULT_SEARCH_OPTIONS } from './types.js';
+import { UltraFastIndexer } from './indexer/UltraFastIndexer.js';
 
 /**
- * Custom MCP Server for Codebase Indexing using Marshal Context Engine
+ * Custom MCP Server for Ultra-Fast Lexical Codebase Indexing (NO EMBEDDINGS)
  */
 class CodebaseIndexerMCPServer {
   private server: Server;
-  private indexer: MarshalCodebaseIndexer | null = null;
+  private indexer: UltraFastIndexer | null = null;
   private projectPath: string;
-  private embeddingsDir: string;
+  private indexDir: string;
 
   constructor() {
     this.projectPath = process.env['PROJECT_PATH'] || process.cwd();
-    this.embeddingsDir = join(this.projectPath, 'custom-indexer', 'embeddings');
+    this.indexDir = join(this.projectPath, 'custom-indexer', 'ultra-fast-index');
     
     this.server = new Server(
       {
-        name: 'marshal-codebase-indexer',
+        name: 'ultra-fast-codebase-indexer',
         version: '2.0.0',
       },
       {
@@ -47,7 +46,7 @@ class CodebaseIndexerMCPServer {
         tools: [
           {
             name: 'index_codebase',
-            description: 'Index the entire codebase using Marshal Context Engine for advanced semantic search',
+            description: 'Index the entire codebase using ultra-fast lexical indexing (NO EMBEDDINGS) for lightning-fast search',
             inputSchema: {
               type: 'object',
               properties: {
@@ -66,7 +65,7 @@ class CodebaseIndexerMCPServer {
           },
           {
             name: 'search_code',
-            description: 'Search the indexed codebase using Marshal Context Engine with advanced semantic understanding, fuzzy matching, and intent-aware search',
+            description: 'Search the indexed codebase using ultra-fast lexical search with TF-IDF scoring and fuzzy matching',
             inputSchema: {
               type: 'object',
               properties: {
@@ -197,7 +196,7 @@ class CodebaseIndexerMCPServer {
 
   private async ensureIndexer(): Promise<void> {
     if (!this.indexer) {
-      this.indexer = new MarshalCodebaseIndexer(this.projectPath, this.embeddingsDir);
+      this.indexer = new UltraFastIndexer(this.projectPath, this.indexDir);
       await this.indexer.initialize();
     }
   }
@@ -221,7 +220,7 @@ class CodebaseIndexerMCPServer {
           progressText = `Processing files: ${filesProcessed}/${totalFiles}${currentFile ? ` (${currentFile})` : ''}`;
           break;
         case 'embedding':
-          progressText = `Generating embeddings: ${chunksProcessed}/${totalChunks}`;
+          progressText = `Building lexical index: ${chunksProcessed}/${totalChunks}`;
           break;
         case 'storing':
           progressText = 'Saving index...';
@@ -236,8 +235,7 @@ class CodebaseIndexerMCPServer {
     });
 
     if (watch) {
-      await this.indexer.startWatching();
-      progressText += '\nFile watching started - index will update automatically on changes.';
+      progressText += '\nNote: File watching not yet implemented for ultra-fast indexer.';
     }
 
     const stats = this.indexer.getStats();
@@ -340,23 +338,23 @@ class CodebaseIndexerMCPServer {
 
     const stats = this.indexer.getStats();
 
-    const statsText = `# Marshal Index Statistics
+    const statsText = `# Ultra-Fast Index Statistics (NO EMBEDDINGS)
 
+**Index Type:** Lexical (TF-IDF)
 **Total Files:** ${stats.totalFiles}
 **Total Chunks:** ${stats.totalChunks}
-**Total Relationships:** ${stats.totalRelationships || 0}
-**Average Complexity:** ${stats.averageComplexity?.toFixed(2) || 'N/A'}
-**Indexing Time:** ${stats.indexingTime ? `${(stats.indexingTime / 1000).toFixed(2)}s` : 'N/A'}
+**Total Terms:** ${(stats as any).totalTerms || 'N/A'}
 **Project Path:** ${this.projectPath}
+**Index Directory:** ${this.indexDir}
 
 ## Languages:
 ${Object.entries(stats.languages).map(([lang, count]) => `- ${lang}: ${count} chunks`).join('\n')}
 
-## Concepts:
-${stats.concepts ? Object.entries(stats.concepts).slice(0, 10).map(([concept, count]) => `- ${concept}: ${count}`).join('\n') : 'No concept data available'}
-
-## Chunk Levels:
-${stats.chunkLevels ? Object.entries(stats.chunkLevels).map(([level, count]) => `- ${level}: ${count} chunks`).join('\n') : 'No level data available'}`;
+## Performance Benefits:
+- ⚡ **NO MODEL DOWNLOADS** - No embedding models required
+- 🚀 **ULTRA-FAST INDEXING** - Pure lexical approach
+- 💾 **MINIMAL STORAGE** - Only stores text indices
+- 🔍 **INSTANT SEARCH** - TF-IDF scoring for fast results`;
 
     return {
       content: [
@@ -397,30 +395,22 @@ ${stats.chunkLevels ? Object.entries(stats.chunkLevels).map(([level, count]) => 
   }
 
   private async handleStartWatching() {
-    if (!this.indexer) throw new Error('Indexer not initialized');
-
-    await this.indexer.startWatching();
-    
     return {
       content: [
         {
           type: 'text',
-          text: 'File watching started. Index will update automatically when files change.'
+          text: 'File watching not yet implemented for ultra-fast indexer. Please re-run indexing manually when files change.'
         }
       ]
     };
   }
 
   private async handleStopWatching() {
-    if (!this.indexer) throw new Error('Indexer not initialized');
-
-    await this.indexer.stopWatching();
-    
     return {
       content: [
         {
           type: 'text',
-          text: 'File watching stopped.'
+          text: 'File watching not active for ultra-fast indexer.'
         }
       ]
     };
@@ -432,9 +422,6 @@ ${stats.chunkLevels ? Object.entries(stats.chunkLevels).map(([level, count]) => 
     };
 
     process.on('SIGINT', async () => {
-      if (this.indexer) {
-        await this.indexer.stopWatching();
-      }
       await this.server.close();
       process.exit(0);
     });

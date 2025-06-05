@@ -8,15 +8,15 @@ import {
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
 import { join } from 'path';
-import { CodebaseIndexer } from './indexer.js';
+import { MarshalCodebaseIndexer } from './indexer/MarshalCodebaseIndexer.js';
 // import { SearchOptions, DEFAULT_SEARCH_OPTIONS } from './types.js';
 
 /**
- * Custom MCP Server for Codebase Indexing
+ * Custom MCP Server for Codebase Indexing using Marshal Context Engine
  */
 class CodebaseIndexerMCPServer {
   private server: Server;
-  private indexer: CodebaseIndexer | null = null;
+  private indexer: MarshalCodebaseIndexer | null = null;
   private projectPath: string;
   private embeddingsDir: string;
 
@@ -26,7 +26,7 @@ class CodebaseIndexerMCPServer {
     
     this.server = new Server(
       {
-        name: 'codebase-indexer',
+        name: 'marshal-codebase-indexer',
         version: '2.0.0',
       },
       {
@@ -47,7 +47,7 @@ class CodebaseIndexerMCPServer {
         tools: [
           {
             name: 'index_codebase',
-            description: 'Index the entire codebase for semantic search',
+            description: 'Index the entire codebase using Marshal Context Engine for advanced semantic search',
             inputSchema: {
               type: 'object',
               properties: {
@@ -66,13 +66,13 @@ class CodebaseIndexerMCPServer {
           },
           {
             name: 'search_code',
-            description: 'Search the indexed codebase using semantic similarity',
+            description: 'Search the indexed codebase using Marshal Context Engine with advanced semantic understanding, fuzzy matching, and intent-aware search',
             inputSchema: {
               type: 'object',
               properties: {
                 query: {
                   type: 'string',
-                  description: 'Search query (natural language or code snippet)'
+                  description: 'Search query (natural language, code snippet, or fuzzy terms like "login page action")'
                 },
                 topK: {
                   type: 'number',
@@ -99,6 +99,11 @@ class CodebaseIndexerMCPServer {
                 includeContent: {
                   type: 'boolean',
                   description: 'Include full chunk content in results',
+                  default: true
+                },
+                fuzzySearch: {
+                  type: 'boolean',
+                  description: 'Enable fuzzy matching for partial terms',
                   default: true
                 }
               },
@@ -192,7 +197,7 @@ class CodebaseIndexerMCPServer {
 
   private async ensureIndexer(): Promise<void> {
     if (!this.indexer) {
-      this.indexer = new CodebaseIndexer(this.projectPath, this.embeddingsDir);
+      this.indexer = new MarshalCodebaseIndexer(this.projectPath, this.embeddingsDir);
       await this.indexer.initialize();
     }
   }
@@ -250,19 +255,21 @@ class CodebaseIndexerMCPServer {
   private async handleSearchCode(args: any) {
     if (!this.indexer) throw new Error('Indexer not initialized');
 
-    const { 
-      query, 
-      topK = 10, 
-      minScore = 0.1, 
-      language, 
-      filePath, 
-      includeContent = true 
+    const {
+      query,
+      topK = 10,
+      minScore = 0.1,
+      language,
+      filePath,
+      includeContent = true,
+      fuzzySearch = true
     } = args;
 
     if (!query) {
       throw new Error('Query is required');
     }
 
+    console.log(`🔍 Marshal Search Query: "${query}" (fuzzy: ${fuzzySearch}, topK: ${topK})`);
     const results = await this.indexer.search(query, topK);
     
     // Filter results
@@ -286,21 +293,35 @@ class CodebaseIndexerMCPServer {
 
     const resultText = filteredResults.map((result, index) => {
       const { chunk, score, relevance } = result;
-      const relativePath = chunk.filePath.replace(this.projectPath, '').replace(/^[\/\\]/, '');
-      
+      const absolutePath = chunk.filePath; // Use absolute path for easy file location
+
       let text = `## Result ${index + 1} (Score: ${score.toFixed(3)}, Relevance: ${relevance.toFixed(3)})\n`;
-      text += `**File:** ${relativePath}\n`;
+      text += `**File:** ${absolutePath}\n`;
       text += `**Language:** ${chunk.language}\n`;
       text += `**Lines:** ${chunk.startLine}-${chunk.endLine}\n`;
-      
+
       if (chunk.symbols && chunk.symbols.length > 0) {
         text += `**Symbols:** ${chunk.symbols.join(', ')}\n`;
       }
-      
+
+      // Add Marshal metadata if available
+      if ((result as any).marshalMetadata) {
+        const metadata = (result as any).marshalMetadata;
+        if (metadata.concepts && metadata.concepts.length > 0) {
+          text += `**Concepts:** ${metadata.concepts.join(', ')}\n`;
+        }
+        if (metadata.complexity !== undefined) {
+          text += `**Complexity:** ${metadata.complexity.toFixed(2)}\n`;
+        }
+        if (metadata.importance !== undefined) {
+          text += `**Importance:** ${metadata.importance.toFixed(2)}\n`;
+        }
+      }
+
       if (includeContent) {
         text += `\n\`\`\`${chunk.language}\n${chunk.content}\n\`\`\`\n`;
       }
-      
+
       return text;
     }).join('\n---\n\n');
 
@@ -318,16 +339,24 @@ class CodebaseIndexerMCPServer {
     if (!this.indexer) throw new Error('Indexer not initialized');
 
     const stats = this.indexer.getStats();
-    
-    const statsText = `# Index Statistics
+
+    const statsText = `# Marshal Index Statistics
 
 **Total Files:** ${stats.totalFiles}
 **Total Chunks:** ${stats.totalChunks}
-**Last Indexed:** ${stats.metadata.lastIndexed ? new Date(stats.metadata.lastIndexed).toLocaleString() : 'Never'}
-**Project Path:** ${stats.metadata.projectPath}
+**Total Relationships:** ${stats.totalRelationships || 0}
+**Average Complexity:** ${stats.averageComplexity?.toFixed(2) || 'N/A'}
+**Indexing Time:** ${stats.indexingTime ? `${(stats.indexingTime / 1000).toFixed(2)}s` : 'N/A'}
+**Project Path:** ${this.projectPath}
 
 ## Languages:
-${Object.entries(stats.languages).map(([lang, count]) => `- ${lang}: ${count} chunks`).join('\n')}`;
+${Object.entries(stats.languages).map(([lang, count]) => `- ${lang}: ${count} chunks`).join('\n')}
+
+## Concepts:
+${stats.concepts ? Object.entries(stats.concepts).slice(0, 10).map(([concept, count]) => `- ${concept}: ${count}`).join('\n') : 'No concept data available'}
+
+## Chunk Levels:
+${stats.chunkLevels ? Object.entries(stats.chunkLevels).map(([level, count]) => `- ${level}: ${count} chunks`).join('\n') : 'No level data available'}`;
 
     return {
       content: [
@@ -414,7 +443,7 @@ ${Object.entries(stats.languages).map(([lang, count]) => `- ${lang}: ${count} ch
   async run(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error('Codebase Indexer MCP Server running on stdio');
+    console.error('Marshal Codebase Indexer MCP Server running on stdio');
   }
 }
 

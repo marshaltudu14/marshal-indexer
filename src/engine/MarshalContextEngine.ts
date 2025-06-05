@@ -36,7 +36,7 @@ export class MarshalContextEngine {
   }
 
   /**
-   * Initialize the Augment-style context engine
+   * Initialize the Marshal-style context engine
    */
   async initialize(): Promise<void> {
     if (this.isInitialized) return;
@@ -68,7 +68,7 @@ export class MarshalContextEngine {
     await this.dataManagement.loadExistingData();
     this.isInitialized = true;
     
-    console.log(`🚀 Augment Context Engine initialized in ${Date.now() - startTime}ms`);
+    console.log(`🚀 Marshal Context Engine initialized in ${Date.now() - startTime}ms`);
   }
 
   /**

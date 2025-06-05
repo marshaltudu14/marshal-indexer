@@ -8,8 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "ts-node --esm src/server.ts",
-    "index": "ts-node --esm src/cli.ts index",
-    "search": "ts-node --esm src/cli.ts search",
+    "index": "node dist/cli.js index",
+    "search": "node dist/cli.js search",
     "clean": "rm -rf dist embeddings",
     "test": "jest"
   },

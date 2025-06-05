@@ -2,12 +2,23 @@
 
 🚀 **The most advanced codebase indexer with superior intent understanding and accuracy**
 
-A revolutionary Model Context Protocol (MCP) server that provides AI agents with unprecedented codebase understanding. Built to surpass Augment's context engine with advanced intent classification, multi-modal search, learning-based ranking, and explainable results. Perfect for massive codebases where traditional search fails and AI agents need deep contextual intelligence.
+A revolutionary Model Context Protocol (MCP) server that provides AI agents with unprecedented codebase understanding. Built with advanced intent classification, multi-modal search, learning-based ranking, and explainable results. Perfect for massive codebases where traditional search fails and AI agents need deep contextual intelligence.
 
-## 🌟 Revolutionary Features Beyond Augment
+## 🎯 Key Features
+
+- **🧠 Advanced Intent Understanding**: Understands what you're looking for, not just keywords
+- **🔍 Multi-Modal Search**: Combines semantic, lexical, and graph-based search
+- **📊 Absolute Path Support**: Always shows complete file paths for easy navigation
+- **⚡ Fuzzy Search**: Finds files even with partial or approximate queries
+- **🏗️ Relationship Mapping**: Understands code dependencies and connections
+- **📈 Learning-Based Ranking**: Improves results based on usage patterns
+- **🔄 Real-Time Updates**: Automatically maintains index as code changes
+- **🎯 Symbol-Aware Search**: Finds specific functions, classes, and variables
+
+## 🌟 Advanced Features
 
 ### 🧠 **Superior Intent Understanding**
-- **Neural Intent Classification**: ML-based intent detection replacing simple pattern matching
+- **Neural Intent Classification**: ML-based intent detection for precise query understanding
 - **Multi-Modal Query Processing**: Handles natural language, code snippets, and hybrid queries
 - **Contextual Query Expansion**: Dynamic expansion based on codebase context and user patterns
 - **Semantic Query Rewriting**: Transforms ambiguous queries into precise search terms
@@ -28,7 +39,7 @@ A revolutionary Model Context Protocol (MCP) server that provides AI agents with
 - **Massive Scale Support**: Handles millions of lines across thousands of files effortlessly
 - **Memory-Efficient Processing**: Optimized data structures and intelligent caching
 - **Real-Time Learning**: Continuously improves without full re-indexing
-- **Distributed Processing**: Scales horizontally for enterprise deployments
+- **Absolute Path Support**: Always shows complete file paths for easy navigation in large projects
 
 ## 🚀 Performance Optimizations (Latest Updates)
 
@@ -69,38 +80,45 @@ This indexer has been completely rewritten with massive performance and robustne
 Add this system prompt to your AI agents for optimal codebase understanding:
 
 ```
-You have access to a high-performance custom codebase indexer via custom-indexer MCP. This indexer provides:
+You have access to a high-performance Marshal codebase indexer via marshal-indexer MCP. This indexer provides:
 
-1. **Semantic Code Search**: Use natural language to find relevant code across the entire codebase
-2. **Full File Paths**: All results show complete absolute paths for precise file location
-3. **Symbol Extraction**: Functions, classes, variables, imports, and exports are automatically identified
-4. **Real-time Updates**: The index automatically updates when files change
-5. **Multi-language Support**: Works with JavaScript, TypeScript, Python, Java, C#, C++, Go, Rust, PHP, Ruby
+1. **Advanced Semantic Search**: Use natural language to find relevant code across the entire codebase
+2. **Absolute File Paths**: All results show complete absolute paths for precise file location in large projects
+3. **Symbol-Aware Search**: Functions, classes, variables, imports, and exports are automatically identified
+4. **Fuzzy Matching**: Finds files even with partial or approximate queries
+5. **Real-time Updates**: The index automatically updates when files change
+6. **Multi-language Support**: Works with 25+ programming languages and file types
+7. **Intent Understanding**: Understands what you're looking for, not just keywords
 
 **Best Practices:**
 - Use descriptive search queries like "authentication middleware" or "database connection setup"
 - The indexer shows full absolute paths - use these for precise file references
-- Search results include relevance scores and symbol information
+- Search results include relevance scores, symbols, and relationship information
 - The index is automatically maintained, so results are always current
-- Use the stats command to understand codebase structure and size
+- Use fuzzy search for partial matches (e.g., "auth" finds "authentication", "authorize", etc.)
+- Leverage absolute paths to navigate large codebases with thousands of files
 
 **Commands Available:**
-- `index_codebase`: Re-index the codebase (usually automatic)
-- `search_code`: Search for code using semantic queries
-- `get_stats`: Get codebase statistics and indexing information
+- `index_codebase`: Re-index the codebase (force: true for complete re-index)
+- `search_code`: Search for code using semantic queries with fuzzy matching
+- `get_stats`: Get comprehensive codebase statistics and indexing information
+- `start_watching`/`stop_watching`: Control automatic file monitoring
+- `clear_index`: Clear all indexed data (confirm: true required)
 
-Always use this indexer first when you need to understand or locate code in the project.
+Always use this indexer first when you need to understand or locate code in the project. The absolute paths make it easy to navigate even the largest codebases.
 ```
 
-## � Quick Start
+## 🚀 Quick Start
 
-### Option 1: Add to Existing Project
+### Option 1: Integrate into Existing Project (Recommended)
 
-1. **Clone this repository into your project:**
+This approach places the indexer inside your project for better path management and easier configuration.
+
+1. **Clone into your project:**
 ```bash
 cd your-project
-git clone https://github.com/marshaltudu14/codebase-mcp-indexer.git custom-indexer
-cd custom-indexer
+git clone https://github.com/marshaltudu14/codebase-mcp-indexer.git marshal-indexer
+cd marshal-indexer
 ```
 
 2. **Install and build:**
@@ -109,23 +127,31 @@ npm install
 npm run build
 ```
 
-3. **Index your codebase:**
-```bash
-# Index entire project (auto-watching enabled by default)
-npm run index
-
-# Index specific directory
-npm run index --project ../src
-
-# Disable auto-watching if needed
-npm run index --no-watch
+3. **Configure MCP (for AI tools like Cursor, Claude Desktop):**
+```json
+{
+  "mcpServers": {
+    "marshal-indexer": {
+      "command": "node",
+      "args": ["marshal-indexer/dist/server.js"],
+      "cwd": "/absolute/path/to/your-project",
+      "env": {
+        "PROJECT_PATH": "/absolute/path/to/your-project"
+      }
+    }
+  }
+}
 ```
 
-4. **Test search:**
+4. **Test the indexer:**
 ```bash
-npm run search "React component"
+# Index your codebase
+npm run index
+
+# Test search
 npm run search "authentication logic"
 npm run search "API endpoint"
+npm run search "React component"
 ```
 
 ### Option 2: Standalone Installation
@@ -144,45 +170,82 @@ npm run index --project /path/to/your/project
 npm run search "function name" --project /path/to/your/project
 ```
 
+### Option 3: Global Installation
+
+1. **Install globally:**
+```bash
+npm install -g @marshal/codebase-indexer
+```
+
+2. **Use anywhere:**
+```bash
+marshal-index /path/to/project
+marshal-search "query" --project /path/to/project
+```
+
 ## 🔧 MCP Integration
 
-Configure the indexer as an MCP server in your AI client:
+Configure the indexer as an MCP server in your AI client. **Always use absolute paths** to avoid configuration issues.
 
 ### For Cursor/Claude Desktop
-Add to your MCP configuration file:
 
+**Option A: Indexer Inside Project (Recommended)**
 ```json
 {
   "mcpServers": {
-    "codebase-indexer": {
+    "marshal-indexer": {
       "command": "node",
-      "args": ["dist/server.js"],
-      "cwd": "/path/to/custom-indexer",
+      "args": ["marshal-indexer/dist/server.js"],
+      "cwd": "/absolute/path/to/your-project",
       "env": {
-        "PROJECT_PATH": "/path/to/your/project"
+        "PROJECT_PATH": "/absolute/path/to/your-project"
       }
     }
   }
 }
 ```
 
-### For Roo Code
-Add to `.roo/mcp.json`:
-
+**Option B: Standalone Indexer**
 ```json
 {
   "mcpServers": {
-    "codebase-indexer": {
+    "marshal-indexer": {
       "command": "node",
       "args": ["dist/server.js"],
-      "cwd": "${workspaceFolder}/custom-indexer",
+      "cwd": "/absolute/path/to/marshal-indexer",
       "env": {
-        "PROJECT_PATH": "${workspaceFolder}"
+        "PROJECT_PATH": "/absolute/path/to/your-project"
       }
     }
   }
 }
 ```
+
+### For Other MCP Clients
+Replace paths with your actual absolute paths:
+
+```json
+{
+  "mcpServers": {
+    "marshal-indexer": {
+      "command": "node",
+      "args": ["marshal-indexer/dist/server.js"],
+      "cwd": "/your/project/root",
+      "env": {
+        "PROJECT_PATH": "/your/project/root"
+      }
+    }
+  }
+}
+```
+
+### ⚠️ Important Configuration Notes
+
+1. **Use Absolute Paths**: Always use complete file paths (e.g., `/Users/username/projects/myapp`)
+2. **Match PROJECT_PATH and cwd**: Both should point to your project root
+3. **Build First**: Run `npm run build` in the indexer directory before configuring MCP
+4. **Restart AI Client**: Restart your AI client after adding MCP configuration
+5. **Check Logs**: Monitor console for any startup errors
 
 ## 📋 What Happens During Setup
 
@@ -222,15 +285,37 @@ Add to `.roo/mcp.json`:
 
 ### Enhanced Fuzzy Search Examples
 ```bash
-# These all find the same MarshalTudu-related code:
-npm run search "Marshal Tudu"      # Space separated
-npm run search "MarshalTudu"       # PascalCase
-npm run search "marshaltudu"       # lowercase
-npm run search "marshal_tudu"      # snake_case
-npm run search "marshal-tudu"      # kebab-case
-npm run search "MT"                # Acronym
-npm run search "tudu"              # Partial word
-npm run search "marshaltudu15"     # With numbers
+# These all find the same user-related code:
+npm run search "User Profile"      # Space separated
+npm run search "UserProfile"       # PascalCase
+npm run search "userprofile"       # lowercase
+npm run search "user_profile"      # snake_case
+npm run search "user-profile"      # kebab-case
+npm run search "UP"                # Acronym
+npm run search "profile"           # Partial word
+npm run search "userprofile123"    # With numbers
+```
+
+### Testing with Large Codebases
+```bash
+# Test indexing performance with large projects (1000+ files)
+npm run index --project /path/to/large/project
+
+# Monitor indexing progress and statistics
+npm run stats
+
+# Test robust search capabilities
+npm run search "auth"              # Should find authentication-related code
+npm run search "api endpoint"      # Should find API route definitions
+npm run search "database"          # Should find database-related code
+npm run search "component"         # Should find UI components
+npm run search "util"              # Should find utility functions
+
+# Test absolute path resolution
+npm run search "login" --project /path/to/project
+# Results will show complete paths like:
+# /absolute/path/to/project/src/auth/login.component.ts
+# /absolute/path/to/project/pages/login/index.tsx
 ```
 
 ### For Code Review & Refactoring
@@ -394,6 +479,33 @@ Clear all indexed data.
 
 ## 🚨 Troubleshooting
 
+### MCP Integration Issues
+
+**Tool Not Available in AI Client:**
+1. Verify the indexer is built: `npm run build`
+2. Check absolute paths in MCP configuration
+3. Restart your AI client completely
+4. Verify PROJECT_PATH environment variable is set correctly
+
+**"Tool does not exist" Error:**
+```json
+// Ensure your MCP config uses the correct tool name
+{
+  "mcpServers": {
+    "marshal-indexer": {  // This name must match
+      "command": "node",
+      "args": ["marshal-indexer/dist/server.js"]
+    }
+  }
+}
+```
+
+**Path Resolution Issues:**
+- Always use absolute paths (e.g., `/Users/username/projects/myapp`)
+- Avoid relative paths like `./` or `../`
+- On Windows, use forward slashes or escape backslashes
+- Verify paths exist and are accessible
+
 ### Model Download Issues
 ```bash
 # Clear cache and retry
@@ -426,9 +538,21 @@ npm run index
 
 ### Permission Issues
 ```bash
-# Ensure proper permissions
-chmod -R 755 custom-indexer/
+# Ensure proper permissions (Unix/Linux/Mac)
+chmod -R 755 marshal-indexer/
 npm run build
+
+# Windows: Run as administrator if needed
+```
+
+### Large Project Optimization
+```bash
+# For projects with 1000+ files
+export NODE_OPTIONS="--max-old-space-size=8192"
+npm run index --project /path/to/project
+
+# Monitor memory usage
+npm run stats
 ```
 
 ## 📊 Performance Benchmarks

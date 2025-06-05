@@ -92,8 +92,8 @@ export function getFileLanguage(filePath: string): string {
  * Check if file should be processed based on extension and ignore patterns
  */
 export function shouldProcessFile(
-  filePath: string, 
-  supportedExtensions: string[], 
+  filePath: string,
+  supportedExtensions: string[],
   ignorePatterns: string[],
   projectRoot: string
 ): boolean {
@@ -104,7 +104,21 @@ export function shouldProcessFile(
 
   const relativePath = relative(projectRoot, filePath);
   const ig = ignore().add(ignorePatterns);
-  
+
+  return !ig.ignores(relativePath);
+}
+
+/**
+ * Check if directory should be processed based on ignore patterns
+ */
+export function shouldProcessDirectory(
+  dirPath: string,
+  ignorePatterns: string[],
+  projectRoot: string
+): boolean {
+  const relativePath = relative(projectRoot, dirPath);
+  const ig = ignore().add(ignorePatterns);
+
   return !ig.ignores(relativePath);
 }
 
@@ -127,7 +141,7 @@ export async function getAllFiles(
         const fullPath = resolve(currentPath, entry.name);
         
         if (entry.isDirectory()) {
-          if (shouldProcessFile(fullPath, ['.dir'], ignorePatterns, resolvedPath)) {
+          if (shouldProcessDirectory(fullPath, ignorePatterns, resolvedPath)) {
             await walkDir(fullPath);
           }
         } else if (entry.isFile()) {

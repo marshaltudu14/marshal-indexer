@@ -2,13 +2,14 @@
 
 ## 🏗️ System Overview
 
-The Marshal Context Engine is designed to surpass Augment's context engine with superior intent understanding, multi-modal search capabilities, and learning-based ranking. The architecture is built around five core principles:
+The Marshal Context Engine is designed with superior intent understanding, multi-modal search capabilities, and learning-based ranking. The architecture is built around five core principles:
 
 1. **Multi-Modal Intelligence**: Combines vector, lexical, and graph-based search
 2. **Adaptive Learning**: Continuously improves through user feedback and usage patterns
 3. **Explainable AI**: Provides clear reasoning for every search result
 4. **Massive Scale**: Handles enterprise codebases with millions of lines of code
 5. **Real-Time Performance**: Sub-second search with intelligent caching
+6. **Absolute Path Support**: Always provides complete file paths for easy navigation in large projects
 
 ## 📁 Directory Structure
 
@@ -195,11 +196,14 @@ The system improves over time through user interactions:
 - **Adaptive Weights**: Adjusts ranking factors based on effectiveness
 
 ### 4. Massive Scale Support
-Designed for enterprise codebases:
+Designed for enterprise codebases with thousands of files and complex directory structures:
+- **Absolute Path Resolution**: Always provides complete file paths for precise navigation
 - **Horizontal Scaling**: Distributes processing across multiple nodes
 - **Incremental Updates**: Only processes changed files
 - **Efficient Storage**: Optimized data structures for large datasets
 - **Real-Time Sync**: Maintains index consistency during development
+- **Directory Traversal**: Robust file discovery that handles deep nested structures
+- **Memory Optimization**: Efficient processing of codebases with 1000+ files
 
 ## 🔧 Configuration and Customization
 
@@ -220,6 +224,26 @@ Designed for enterprise codebases:
 - **Feedback Weights**: Set importance of different feedback types
 - **History Retention**: Configure data retention periods
 - **Personalization**: Enable/disable user-specific adaptations
+
+## 🔄 Recent Improvements
+
+### Path Handling Enhancements
+- **Absolute Path Support**: All search results now show complete absolute paths
+- **Directory Traversal Fix**: Fixed critical bug in file discovery for nested directories
+- **Large Project Support**: Optimized for codebases with thousands of files and deep folder structures
+- **Cross-Platform Compatibility**: Improved path handling for Windows, macOS, and Linux
+
+### Search Quality Improvements
+- **Fuzzy Search Enhancement**: Better partial matching and approximate queries
+- **Intent Classification**: Improved understanding of user search intent
+- **Symbol-Aware Search**: Enhanced detection of functions, classes, and variables
+- **Relationship Mapping**: Better understanding of code dependencies and connections
+
+### Performance Optimizations
+- **Memory Management**: Reduced memory usage for large codebases
+- **Concurrent Processing**: Improved parallel file processing
+- **Caching System**: Multi-layer caching for faster subsequent searches
+- **Index Efficiency**: Optimized data structures for better search performance
 
 ## 🚀 Future Enhancements
 

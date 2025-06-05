@@ -11,7 +11,7 @@ import { PerformanceMonitor } from '../utils/PerformanceMonitor.js';
 import { CacheManager } from '../utils/CacheManager.js';
 
 /**
- * Enhanced Marshal Context Engine - Superior to Augment's capabilities
+ * Enhanced Marshal Context Engine - Superior to other context engines
  * Provides advanced intent understanding, multi-modal search, and learning-based ranking
  */
 export class MarshalContextEngine {

@@ -14,7 +14,9 @@ build/
 embeddings/
 test-embeddings/
 local_cache/
+ultra-fast-index/
 .indexer-metadata.json
+.marshal-metadata.json
 
 # Environment files
 .env

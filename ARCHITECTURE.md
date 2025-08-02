@@ -36,10 +36,10 @@ src/
 ## 🔧 Core Components
 
 ### 1. UltraFastIndexer (Enhanced)
-- **Purpose**: Lightning-fast file processing with contextual analysis
+- **Purpose**: Lightning-fast file processing with contextual analysis across multiple projects
 - **Technology**: Enhanced lexical analysis with TF-IDF scoring and code structure understanding
 - **Performance**: 6x faster than embedding-based solutions (5.28s for 895 files)
-- **Features**: Auto-watching, incremental updates, smart file filtering, contextual metadata
+- **Features**: Auto-watching, incremental updates, smart file filtering, contextual metadata, **supports multiple project paths**
 
 ### 2. ContextualAnalyzer (NEW)
 - **Purpose**: Augment-like code structure understanding without embeddings

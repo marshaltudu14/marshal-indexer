@@ -159,7 +159,7 @@ npm run build
       "args": ["marshal-indexer/dist/server.js"],
       "cwd": "/absolute/path/to/your-project",
       "env": {
-        "PROJECT_PATH": "/absolute/path/to/your-project"
+        "PROJECT_PATHS": "/absolute/path/to/your-project,/absolute/path/to/another-project"
       }
     }
   }
@@ -221,7 +221,7 @@ Configure the indexer as an MCP server in your AI client. **Always use absolute 
       "args": ["marshal-indexer/dist/server.js"],
       "cwd": "/absolute/path/to/your-project",
       "env": {
-        "PROJECT_PATH": "/absolute/path/to/your-project"
+        "PROJECT_PATHS": "/absolute/path/to/your-project,/absolute/path/to/another-project"
       }
     }
   }
@@ -237,7 +237,7 @@ Configure the indexer as an MCP server in your AI client. **Always use absolute 
       "args": ["dist/server.js"],
       "cwd": "/absolute/path/to/marshal-indexer",
       "env": {
-        "PROJECT_PATH": "/absolute/path/to/your-project"
+        "PROJECT_PATHS": "/absolute/path/to/your-project,/absolute/path/to/another-project"
       }
     }
   }
@@ -255,7 +255,7 @@ Replace paths with your actual absolute paths:
       "args": ["marshal-indexer/dist/server.js"],
       "cwd": "/your/project/root",
       "env": {
-        "PROJECT_PATH": "/your/project/root"
+        "PROJECT_PATHS": "/absolute/path/to/your-project,/absolute/path/to/another-project"
       }
     }
   }

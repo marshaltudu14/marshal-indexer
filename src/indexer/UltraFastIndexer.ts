@@ -26,7 +26,7 @@ const DEFAULT_INDEXING_OPTIONS: IndexingOptions = {
  * Now modular and maintainable with separated concerns
  */
 export class UltraFastIndexer {
-  private projectPath: string;
+  private projectPaths: string[];
   private options: IndexingOptions;
 
   // Core processors
@@ -41,14 +41,14 @@ export class UltraFastIndexer {
   private chunks: CodeChunk[] = [];
   private codeStructures: Map<string, CodeStructureInfo> = new Map();
 
-  constructor(projectPath: string, indexDir: string, options: Partial<IndexingOptions> = {}) {
-    this.projectPath = projectPath;
+  constructor(projectPaths: string[], indexDir: string, options: Partial<IndexingOptions> = {}) {
+    this.projectPaths = projectPaths;
     this.options = { ...DEFAULT_INDEXING_OPTIONS, ...options };
 
     // Initialize processors
     this.fileProcessor = new FileProcessor();
     this.lexicalIndexBuilder = new LexicalIndexBuilder();
-    this.fileWatcher = new FileWatcher(projectPath);
+    this.fileWatcher = new FileWatcher(this.projectPaths);
     this.indexPersistence = new IndexPersistence(indexDir);
     this.enhancedSearch = new EnhancedSearch();
     this.enhancedRanking = new EnhancedRanking();
@@ -87,7 +87,7 @@ export class UltraFastIndexer {
    * Index the entire project with enhanced analysis
    */
   async indexProject(_progressCallback?: (progress: any) => void): Promise<void> {
-    console.log(`🚀 Starting enhanced indexing of ${this.projectPath}...`);
+    console.log(`🚀 Starting enhanced indexing of ${this.projectPaths.join(', ')}...`);
     const startTime = Date.now();
 
     try {
@@ -106,9 +106,15 @@ export class UltraFastIndexer {
         return;
       }
 
-      // Get all code files
-      const files = await getAllCodeFiles(this.projectPath, this.options.excludePatterns || []);
-      console.log(`📁 Found ${files.length} code files`);
+      // Get all code files from all project paths
+      let allFiles: string[] = [];
+      for (const projectPath of this.projectPaths) {
+        const filesInPath = await getAllCodeFiles(projectPath, this.options.excludePatterns || []);
+        allFiles = allFiles.concat(filesInPath);
+      }
+      console.log(`📁 Found ${allFiles.length} code files across ${this.projectPaths.length} projects`);
+
+      const files = allFiles;
 
       // Clear existing data
       this.chunks = [];
@@ -341,12 +347,14 @@ export class UltraFastIndexer {
     totalChunks: number;
     totalFiles: number;
     isWatching: boolean;
+    projectPaths: string[];
     indexStats: any;
   } {
     return {
       totalChunks: this.chunks.length,
       totalFiles: this.codeStructures.size,
       isWatching: this.fileWatcher.getIsWatching(),
+      projectPaths: this.projectPaths,
       indexStats: this.lexicalIndexBuilder.getStats()
     };
   }

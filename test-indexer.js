@@ -12,7 +12,7 @@ async function testIndexer() {
   
   try {
     // Create indexer instance
-    const indexer = new UltraFastIndexer(projectPath, indexDir);
+    const indexer = new UltraFastIndexer([projectPath], indexDir);
     
     // Initialize
     console.log('🔧 Initializing indexer...');

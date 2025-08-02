@@ -317,7 +317,7 @@ export function isCodeFile(filePath: string): boolean {
  * Get all code files in a directory
  */
 export async function getAllCodeFiles(
-  dirPath: string,
+  dir: string | string[],
   excludePatterns: string[] = []
 ): Promise<string[]> {
   const codeExtensions = [
@@ -347,5 +347,13 @@ export async function getAllCodeFiles(
 
   const allExcludePatterns = [...defaultExcludePatterns, ...excludePatterns];
 
-  return await getAllFiles(dirPath, codeExtensions, allExcludePatterns);
+  if (Array.isArray(dir)) {
+    let allFiles: string[] = [];
+    for (const d of dir) {
+      allFiles = allFiles.concat(await getAllFiles(d, codeExtensions, allExcludePatterns));
+    }
+    return allFiles;
+  } else {
+    return await getAllFiles(dir, codeExtensions, allExcludePatterns);
+  }
 }

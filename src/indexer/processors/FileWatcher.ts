@@ -13,13 +13,13 @@ export interface FileChangeEvent {
 export class FileWatcher extends EventEmitter {
   private watcher: FSWatcher | null = null;
   private isWatching = false;
-  private projectPath: string;
+  private projectPaths: string[];
   private debounceMap: Map<string, NodeJS.Timeout> = new Map();
   private readonly debounceDelay = 500; // 500ms debounce
 
-  constructor(projectPath: string) {
+  constructor(projectPaths: string[]) {
     super();
-    this.projectPath = projectPath;
+    this.projectPaths = projectPaths;
   }
 
   /**
@@ -33,7 +33,7 @@ export class FileWatcher extends EventEmitter {
 
     console.log('👀 Starting file watcher...');
 
-    this.watcher = watch(this.projectPath, {
+    this.watcher = watch(this.projectPaths, {
       ignored: [
         '**/node_modules/**',
         '**/.git/**',
@@ -145,12 +145,12 @@ export class FileWatcher extends EventEmitter {
   getStats(): {
     isWatching: boolean;
     pendingChanges: number;
-    watchedPath: string;
+    watchedPaths: string[];
   } {
     return {
       isWatching: this.isWatching,
       pendingChanges: this.debounceMap.size,
-      watchedPath: this.projectPath
+      watchedPaths: this.projectPaths
     };
   }
 }

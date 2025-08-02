@@ -16,12 +16,12 @@ import { UltraFastIndexer } from './indexer/UltraFastIndexer.js';
 class CodebaseIndexerMCPServer {
   private server: Server;
   private indexer: UltraFastIndexer | null = null;
-  private projectPath: string;
+  private projectPaths: string[];
   private indexDir: string;
 
   constructor() {
-    this.projectPath = process.env['PROJECT_PATH'] || process.cwd();
-    this.indexDir = join(this.projectPath, 'custom-indexer', 'ultra-fast-index');
+    this.projectPaths = (process.env['PROJECT_PATHS'] || process.cwd()).split(',');
+    this.indexDir = join(process.cwd(), 'custom-indexer', 'ultra-fast-index');
     
     this.server = new Server(
       {
@@ -196,7 +196,7 @@ class CodebaseIndexerMCPServer {
 
   private async ensureIndexer(): Promise<void> {
     if (!this.indexer) {
-      this.indexer = new UltraFastIndexer(this.projectPath, this.indexDir);
+      this.indexer = new UltraFastIndexer(this.projectPaths, this.indexDir);
       await this.indexer.initialize();
     }
   }
@@ -346,7 +346,7 @@ class CodebaseIndexerMCPServer {
 **Total Files:** ${stats.totalFiles}
 **Total Chunks:** ${stats.totalChunks}
 **Total Terms:** ${(stats as any).totalTerms || 'N/A'}
-**Project Path:** ${this.projectPath}
+**Project Paths:** ${stats.projectPaths.join(', ')}
 **Index Directory:** ${this.indexDir}
 
 ## Languages:

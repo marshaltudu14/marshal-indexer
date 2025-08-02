@@ -10,7 +10,7 @@
     "dev": "ts-node --esm src/server.ts",
     "index": "node dist/cli.js index",
     "search": "node dist/cli.js search",
-    "clean": "rm -rf dist embeddings",
+    "clean": "rd /s /q dist & rd /s /q embeddings",
     "test": "jest"
   },
   "dependencies": {

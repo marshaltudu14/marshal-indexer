@@ -1,8 +1,14 @@
-# Marshal Context Engine - Architecture
+# Marshal Indexer - Architecture
 
 ## 🏗️ System Overview
 
-The Marshal Context Engine is designed to rival Augment's context engine using **pure lexical indexing with contextual intelligence**. The architecture delivers 6x faster indexing while maintaining high search quality through advanced code understanding.
+The Marshal Indexer is designed to rival Augment's context engine using **pure lexical indexing with contextual intelligence**. The architecture delivers 6x faster indexing while maintaining high search quality through advanced code understanding.
+
+## 📦 Package Distribution
+
+**Package Name**: `marshal-indexer`
+**Distribution Method**: Local NPX-compatible package (no npm registry dependency)
+**Compatibility**: Works on any system with Node.js 18+
 
 ## 🎯 Core Design Principles
 
@@ -242,6 +248,28 @@ Designed for enterprise codebases with thousands of files and complex directory 
 - **Concurrent Processing**: Improved parallel file processing
 - **Caching System**: Multi-layer caching for faster subsequent searches
 - **Index Efficiency**: Optimized data structures for better search performance
+
+## 🔌 MCP Integration Architecture
+
+### Server Implementation
+- **Protocol**: Model Context Protocol (MCP) for AI agent communication
+- **Transport**: StdioServerTransport for reliable communication
+- **Tools Available**:
+  - `index_codebase`: Index projects with file watching
+  - `search_code`: Advanced search with TF-IDF scoring
+  - `get_index_stats`: Comprehensive index statistics
+  - `clear_index`: Index management
+  - `start_watching`/`stop_watching`: File monitoring control
+
+### Deployment Methods
+1. **NPX Method**: `npx -y /path/to/marshal-indexer-2.0.0.tgz`
+2. **NPM Method**: `npm run mcp` in project directory
+3. **Node Method**: Direct execution via `node dist/server.js`
+
+### Environment Configuration
+- **PROJECT_PATHS**: Comma-separated absolute paths to projects
+- **Auto-Detection**: Fallback to current working directory
+- **Cross-Platform**: Windows, macOS, and Linux support
 
 ## 🚀 Future Enhancements
 

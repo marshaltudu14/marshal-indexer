@@ -1,5 +1,5 @@
 {
-  "name": "codebase-mcp-indexer",
+  "name": "marshal-indexer",
   "version": "2.0.0",
   "description": "AI-powered codebase indexer with semantic search via Model Context Protocol (MCP)",
   "main": "dist/server.js",
@@ -7,11 +7,16 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
+    "mcp": "node dist/server.js",
+    "mcp:start": "npm run build && node dist/server.js",
     "dev": "ts-node --esm src/server.ts",
     "index": "node dist/cli.js index",
     "search": "node dist/cli.js search",
     "clean": "rd /s /q dist & rd /s /q embeddings",
     "test": "jest"
+  },
+  "bin": {
+    "marshal-indexer": "./dist/server.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
@@ -34,6 +39,12 @@
   "engines": {
     "node": ">=18.0.0"
   },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "preferGlobal": false,
   "keywords": [
     "ai",
     "codebase",
@@ -54,10 +65,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/marshaltudu14/codebase-mcp-indexer.git"
+    "url": "https://github.com/marshaltudu14/marshal-indexer.git"
   },
   "bugs": {
-    "url": "https://github.com/marshaltudu14/codebase-mcp-indexer/issues"
+    "url": "https://github.com/marshaltudu14/marshal-indexer/issues"
   },
-  "homepage": "https://github.com/marshaltudu14/codebase-mcp-indexer#readme"
+  "homepage": "https://github.com/marshaltudu14/marshal-indexer#readme"
 }

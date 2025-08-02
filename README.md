@@ -140,24 +140,42 @@ This approach places the indexer inside your project for better path management 
 1. **Clone into your project:**
 ```bash
 cd your-project
-git clone https://github.com/marshaltudu14/codebase-mcp-indexer.git marshal-indexer
+git clone https://github.com/marshaltudu14/marshal-indexer.git marshal-indexer
 cd marshal-indexer
 ```
 
-2. **Install and build:**
+2. **Install, build, and create package:**
 ```bash
 npm install
 npm run build
+npm pack  # Creates marshal-indexer-2.0.0.tgz for npx usage
 ```
 
 3. **Configure MCP (for AI tools like Cursor, Claude Desktop):**
+
+**Option A: NPX Method (Recommended)**
 ```json
 {
   "mcpServers": {
     "marshal-indexer": {
-      "command": "node",
-      "args": ["marshal-indexer/dist/server.js"],
-      "cwd": "/absolute/path/to/your-project",
+      "command": "npx",
+      "args": ["-y", "/absolute/path/to/your-project/marshal-indexer/marshal-indexer-2.0.0.tgz"],
+      "env": {
+        "PROJECT_PATHS": "/absolute/path/to/your-project,/absolute/path/to/another-project"
+      }
+    }
+  }
+}
+```
+
+**Option B: NPM Method**
+```json
+{
+  "mcpServers": {
+    "marshal-indexer": {
+      "command": "npm",
+      "args": ["run", "mcp"],
+      "cwd": "/absolute/path/to/your-project/marshal-indexer",
       "env": {
         "PROJECT_PATHS": "/absolute/path/to/your-project,/absolute/path/to/another-project"
       }
@@ -181,45 +199,50 @@ npm run search "React component"
 
 1. **Clone and setup:**
 ```bash
-git clone https://github.com/marshaltudu14/codebase-mcp-indexer.git
-cd codebase-mcp-indexer
+git clone https://github.com/marshaltudu14/marshal-indexer.git
+cd marshal-indexer
 npm install
 npm run build
+npm pack  # Creates marshal-indexer-2.0.0.tgz
 ```
 
-2. **Index any project:**
+2. **Use the package anywhere:**
+```bash
+# Copy the .tgz file to any location and use with npx
+npx -y /path/to/marshal-indexer-2.0.0.tgz
+```
+
+3. **Test CLI commands:**
 ```bash
 npm run index --project /path/to/your/project
 npm run search "function name" --project /path/to/your/project
 ```
 
-### Option 3: Global Installation
-
-1. **Install globally:**
-```bash
-npm install -g @marshal/codebase-indexer
-```
-
-2. **Use anywhere:**
-```bash
-marshal-index /path/to/project
-marshal-search "query" --project /path/to/project
-```
-
 ## 🔧 MCP Integration
 
-Configure the indexer as an MCP server in your AI client. **Always use absolute paths** to avoid configuration issues.
+Configure the indexer as an MCP server in your AI client. **Works on any system with these local methods!**
 
-### For Cursor/Claude Desktop
+### 🚀 Method 1: NPX with Local Package (Recommended)
 
-**Option A: Indexer Inside Project (Recommended)**
+**Clone once, use anywhere with npx:**
+```bash
+# Clone the repository
+git clone https://github.com/marshaltudu14/marshal-indexer.git
+cd marshal-indexer
+npm install && npm run build
+npm pack
+```
+
+**Then configure MCP:**
 ```json
 {
   "mcpServers": {
     "marshal-indexer": {
-      "command": "node",
-      "args": ["marshal-indexer/dist/server.js"],
-      "cwd": "/absolute/path/to/your-project",
+      "command": "npx",
+      "args": [
+        "-y",
+        "/absolute/path/to/marshal-indexer/marshal-indexer-2.0.0.tgz"
+      ],
       "env": {
         "PROJECT_PATHS": "/absolute/path/to/your-project,/absolute/path/to/another-project"
       }
@@ -228,7 +251,27 @@ Configure the indexer as an MCP server in your AI client. **Always use absolute 
 }
 ```
 
-**Option B: Standalone Indexer**
+### 📁 Method 2: NPM Run (Simple Setup)
+
+**For users who prefer npm commands:**
+```json
+{
+  "mcpServers": {
+    "marshal-indexer": {
+      "command": "npm",
+      "args": ["run", "mcp"],
+      "cwd": "/absolute/path/to/marshal-indexer",
+      "env": {
+        "PROJECT_PATHS": "/absolute/path/to/your-project,/absolute/path/to/another-project"
+      }
+    }
+  }
+}
+```
+
+### 🔧 Method 3: Direct Node Execution
+
+**For maximum control:**
 ```json
 {
   "mcpServers": {
@@ -244,31 +287,81 @@ Configure the indexer as an MCP server in your AI client. **Always use absolute 
 }
 ```
 
-### For Other MCP Clients
-Replace paths with your actual absolute paths:
+### 🌍 Cross-Platform Examples
 
+**Windows (NPX Method):**
 ```json
 {
   "mcpServers": {
     "marshal-indexer": {
-      "command": "node",
-      "args": ["marshal-indexer/dist/server.js"],
-      "cwd": "/your/project/root",
+      "command": "npx",
+      "args": ["-y", "C:/path/to/marshal-indexer/marshal-indexer-2.0.0.tgz"],
       "env": {
-        "PROJECT_PATHS": "/absolute/path/to/your-project,/absolute/path/to/another-project"
+        "PROJECT_PATHS": "C:/Users/username/projects/myapp,C:/Users/username/projects/another-app"
       }
     }
   }
 }
 ```
 
+**macOS/Linux (NPX Method):**
+```json
+{
+  "mcpServers": {
+    "marshal-indexer": {
+      "command": "npx",
+      "args": ["-y", "/path/to/marshal-indexer/marshal-indexer-2.0.0.tgz"],
+      "env": {
+        "PROJECT_PATHS": "/Users/username/projects/myapp,/home/username/projects/another-app"
+      }
+    }
+  }
+}
+```
+
+**Windows (NPM Method):**
+```json
+{
+  "mcpServers": {
+    "marshal-indexer": {
+      "command": "npm",
+      "args": ["run", "mcp"],
+      "cwd": "C:/path/to/marshal-indexer",
+      "env": {
+        "PROJECT_PATHS": "C:/Users/username/projects/myapp,C:/Users/username/projects/another-app"
+      }
+    }
+  }
+}
+```
+
+### 🎯 Local NPX Benefits
+
+**✅ Universal Compatibility:**
+- Works on any system with Node.js installed
+- Clone once, use anywhere with npx
+- Automatic dependency resolution from local package
+- No npm registry dependency
+
+**✅ Simple Setup:**
+- One-time clone and build
+- Portable .tgz package works everywhere
+- No global installation required
+- Works across different operating systems
+
+**✅ File Watching:**
+- Full file watching capabilities maintained
+- Real-time index updates on file changes
+- Automatic detection of new/modified/deleted files
+- Chokidar-based monitoring works with all execution methods
+
 ### ⚠️ Important Configuration Notes
 
 1. **Use Absolute Paths**: Always use complete file paths (e.g., `/Users/username/projects/myapp`)
-2. **Match PROJECT_PATH and cwd**: Both should point to your project root
-3. **Build First**: Run `npm run build` in the indexer directory before configuring MCP
-4. **Restart AI Client**: Restart your AI client after adding MCP configuration
-5. **Check Logs**: Monitor console for any startup errors
+2. **PROJECT_PATHS Environment Variable**: Set this to comma-separated absolute paths of your projects
+3. **Restart AI Client**: Restart your AI client after adding MCP configuration
+4. **Check Logs**: Monitor console for any startup errors
+5. **Node.js Required**: Ensure Node.js 18+ is installed on your system
 
 ## 📋 What Happens During Setup
 
@@ -504,7 +597,7 @@ Clear all indexed data.
 1. Verify the indexer is built: `npm run build`
 2. Check absolute paths in MCP configuration
 3. Restart your AI client completely
-4. Verify PROJECT_PATH environment variable is set correctly
+4. Verify PROJECT_PATHS environment variable is set correctly
 
 **"Tool does not exist" Error:**
 ```json
